@@ -13,36 +13,34 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
-const PORT = process.env.PORT || 3001;
-const HOST = process.env.HOST || '0.0.0.0';
-const FALLBACK_RAILWAY_PORT = '3000';
+
+// ✅ ONLY ONE PORT + HOST
+const PORT = process.env.PORT || 3000;
+const HOST = '0.0.0.0';
 
 app.use(cors());
 app.use(express.json());
 
-// API Routes
+// API routes
 app.use('/api/auth', authRoutes);
 app.use('/api/projects', projectRoutes);
 app.use('/api/tasks', taskRoutes);
 app.use('/api/users', userRoutes);
 
-// Keep API requests from falling through to the frontend HTML fallback.
+// API fallback (important)
 app.use('/api', (req, res) => {
   res.status(404).json({ error: `API route not found: ${req.method} ${req.originalUrl}` });
 });
 
-// Serve static frontend files (used when deployed)
+// Static frontend
 app.use(express.static(path.join(__dirname, '../dist')));
 
-// Fallback for React Router
-app.get(/.*/, (req, res) => {
+// React fallback (DO NOT TOUCH)
+app.get(/^(?!\/api).*/, (req, res) => {
   res.sendFile(path.join(__dirname, '../dist/index.html'));
 });
 
-
-const PORT = process.env.PORT || 3000;
-const HOST = '0.0.0.0';
-
+// Start server
 app.listen(PORT, HOST, () => {
-  console.log(`Server is running on http://${HOST}:${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });
