@@ -1,0 +1,53 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             String    @id @default(cuid())
+  name           String
+  email          String    @unique
+  password       String
+  role           String    @default("member") // "admin" or "member"
+  createdAt      DateTime  @default(now())
+
+  projectsCreated Project[] @relation("ProjectCreator")
+  tasksCreated    Task[]    @relation("TaskCreator")
+  tasksAssigned   Task[]    @relation("TaskAssignee")
+}
+
+model Project {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  color       String   @default("#6366f1")
+  createdById String
+  createdBy   User     @relation("ProjectCreator", fields: [createdById], references: [id])
+  createdAt   DateTime @default(now())
+
+  tasks       Task[]
+}
+
+model Task {
+  id           String   @id @default(cuid())
+  title        String
+  description  String?
+  projectId    String
+  project      Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  
+  assignedToId String?
+  assignedTo   User?    @relation("TaskAssignee", fields: [assignedToId], references: [id])
+
+  status       String   @default("pending") // "pending", "in-progress", "completed"
+  priority     String   @default("medium")  // "low", "medium", "high"
+  dueDate      DateTime?
+
+  createdById  String
+  createdBy    User     @relation("TaskCreator", fields: [createdById], references: [id])
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
