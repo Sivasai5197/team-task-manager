@@ -11,7 +11,7 @@
     "dev:client": "vite",
     "dev:server": "nodemon server/index.js",
     "build": "prisma generate && vite build",
-    "start": "prisma db push && node server/seed.js && node server/index.js",
+    "start": "node server/start.js",
     "lint": "eslint .",
     "preview": "vite preview"
   },
