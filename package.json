@@ -7,14 +7,14 @@
     "node": ">=20.19.0"
   },
   "scripts": {
-  "dev": "prisma db push && node server/seed.js && node server/dev.js",
-  "dev:client": "vite",
-  "dev:server": "nodemon server/index.js",
-  "build": "prisma generate && prisma db push && vite build",
-  "start": "node server/start.js",
-  "lint": "eslint .",
-  "preview": "vite preview"
-},
+    "dev": "prisma db push && node server/seed.js && node server/dev.js",
+    "dev:client": "vite",
+    "dev:server": "nodemon server/index.js",
+    "build": "prisma generate && vite build",
+    "start": "node server/start.js",
+    "lint": "eslint .",
+    "preview": "vite preview"
+  },
   "dependencies": {
     "@prisma/client": "^6.19.3",
     "bcryptjs": "^3.0.3",
