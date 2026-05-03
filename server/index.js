@@ -39,14 +39,10 @@ app.get(/.*/, (req, res) => {
   res.sendFile(path.join(__dirname, '../dist/index.html'));
 });
 
-const listen = (port) => {
-  app.listen(port, HOST, () => {
-    console.log(`Server is running on http://${HOST}:${port}`);
-  });
-};
 
-listen(PORT);
+const PORT = process.env.PORT || 3000;
+const HOST = '0.0.0.0';
 
-if (process.env.RAILWAY_ENVIRONMENT && String(PORT) !== FALLBACK_RAILWAY_PORT) {
-  listen(FALLBACK_RAILWAY_PORT);
-}
+app.listen(PORT, HOST, () => {
+  console.log(`Server is running on http://${HOST}:${PORT}`);
+});
